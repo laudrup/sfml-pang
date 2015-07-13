@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "player.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -14,11 +15,13 @@
 
 int main()
 {
-  sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
+  sf::RenderWindow window(sf::VideoMode(640, 480), "SFML works!");
   std::vector<std::shared_ptr<Ball>> balls = { std::make_shared<Ball>(window, sf::Vector2f(200, 200), Ball::Type::Large, sf::Color::Red, Ball::Direction::East),
                                                std::make_shared<Ball>(window, sf::Vector2f(200, 200), Ball::Type::Medium, sf::Color::Blue, Ball::Direction::West),
                                                std::make_shared<Ball>(window, sf::Vector2f(200, 200), Ball::Type::Small, sf::Color::Green, Ball::Direction::East),
                                                std::make_shared<Ball>(window, sf::Vector2f(200, 200), Ball::Type::Tiny, sf::Color::Yellow, Ball::Direction::West) };
+
+  auto player = std::make_shared<Player>(window, sf::Vector2f(10, window.getSize().y - 64));
   sf::Clock clock;
   sf::Clock AITimer;
   const sf::Time AITime = sf::seconds(0.01f);
@@ -66,6 +69,25 @@ int main()
         ball->move();
         ball->draw();
       }
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+      {
+        static int foo = 0;
+        std::cerr << "You shot " << foo++ << std::endl;
+        player->shoot();
+      }
+      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+      {
+        player->move(Player::Direction::Left);
+      }
+      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+      {
+        player->move(Player::Direction::Right);
+      }
+      else
+      {
+        player->stand();
+      }
+      player->draw();
       window.display();
     }
   }
