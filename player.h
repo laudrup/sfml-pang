@@ -1,38 +1,54 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "shot.h"
+
 #include <SFML/Graphics.hpp>
 
-#include <memory>
+#include <Thor/Animations.hpp>
+#include <Thor/Resources.hpp>
 
-class Player
+#include <vector>
+#include <string>
+
+class Player : public sf::Drawable, public sf::Transformable
 {
 public:
   enum class Direction
   {
     Left,
-    Right
+    Right,
+    Stopped
   };
 
-  Player(sf::RenderWindow& window, sf::Vector2f pos);
-  void move(Direction direction);
-  void stand();
-  void shoot();
-  void draw();
+  Player(sf::Vector2f pos, const sf::IntRect& area,
+         thor::ResourceHolder<sf::Texture, std::string>& resources);
+  bool handleEvent(sf::Event event);
+  void update(sf::Time delta_time);
+  std::vector<std::shared_ptr<Shot>> shots() const { return shots_; }
+  sf::FloatRect bounds() const;
+  void removeShot();
 
 private:
-  sf::RenderWindow& window_;
-  sf::Vector2f pos_;
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
   Direction direction_;
-  sf::RectangleShape sprite_;
-  int count_;
-  static std::shared_ptr<sf::Texture> texture_;
+  sf::Sprite sprite_;
+  const sf::IntRect area_;
   const std::vector<sf::IntRect> walk_textures_ = { sf::IntRect(10, 2, 32, 32),
                                                     sf::IntRect(44, 2, 32, 32),
                                                     sf::IntRect(78, 2, 32, 32),
                                                     sf::IntRect(112, 2, 32, 32),
                                                     sf::IntRect(146, 2, 32, 32) };
-  std::vector<sf::IntRect>::const_iterator current_walk_texture_;
+  const std::vector<sf::IntRect> shoot_textures_ = { sf::IntRect(10, 112, 32, 32),
+                                                     sf::IntRect(44, 112, 32, 32),
+                                                     sf::IntRect(10, 112, 32, 32) };
+  thor::FrameAnimation walk_anim_;
+  thor::FrameAnimation shoot_anim_;
+  thor::Animator<sf::Sprite, std::string> anim_;
+  const sf::Vector2f speed_ {200.f, 200.f};
+  std::vector<std::shared_ptr<Shot>> shots_;
+  thor::ResourceHolder<sf::Texture, std::string>& resources_;
 };
 
 #endif // PLAYER_H

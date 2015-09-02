@@ -1,0 +1,21 @@
+#ifndef BACKGROUND_H
+#define BACKGROUND_H
+
+#include <SFML/Graphics.hpp>
+
+#include <Thor/Resources.hpp>
+
+class Background : public sf::Drawable
+{
+public:
+  Background(const sf::Vector2u& area,
+             thor::ResourceHolder<sf::Texture, std::string>& resources);
+  sf::Vector2f scale() const { return sprite_.getScale(); }
+
+private:
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+  sf::Sprite sprite_;
+};
+
+#endif // BACKGROUND_H

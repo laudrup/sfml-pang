@@ -1,80 +1,146 @@
 #include "player.h"
 
-Player::Player(sf::RenderWindow& window, sf::Vector2f pos)
-  : window_(window),
-    pos_(pos),
-    direction_(Direction::Right),
-    sprite_(sf::Vector2f(32, 32)),
-    count_(0),
-    current_walk_texture_(walk_textures_.begin())
+#include <iostream>
+
+namespace res = thor::Resources;
+
+Player::Player(sf::Vector2f pos, const sf::IntRect& area,
+               thor::ResourceHolder<sf::Texture, std::string>& resources)
+  : direction_(Direction::Stopped),
+    area_(area),
+    resources_(resources)
 {
-  if (!texture_)
+  sf::Image img;
+  if (!img.loadFromFile("gfx/player.png"))
   {
-    texture_ = std::make_shared<sf::Texture>();
-    if (!texture_->loadFromFile("gfx/player.png"))
-    {
-      abort();
-    }
-    texture_->setSmooth(true);
+    abort();
   }
-  sprite_.setTexture(texture_.get());
-  sprite_.setScale(2.f, 2.f);
-  sprite_.setTextureRect(*current_walk_texture_);
+  img.createMaskFromColor(sf::Color::Green);
+  sprite_.setTexture(resources.acquire("player", res::fromImage<sf::Texture>(img)));
+  setScale(2.f, 2.f);
+  sprite_.setTextureRect(*walk_textures_.begin());
+  sprite_.setOrigin(sprite_.getLocalBounds().width / 2,
+                    sprite_.getLocalBounds().height / 2);
+  setPosition(pos.x, pos.y + sprite_.getLocalBounds().height / 2);
+  for (const auto& rect : walk_textures_)
+  {
+    walk_anim_.addFrame(1.f, rect);
+  }
+  anim_.addAnimation("walk", walk_anim_, sf::seconds(0.6f));
+
+  for (const auto& rect : shoot_textures_)
+  {
+    shoot_anim_.addFrame(1.f, rect);
+  }
+  anim_.addAnimation("shoot", shoot_anim_, sf::seconds(0.3f));
 }
 
-void Player::move(Direction direction)
+sf::FloatRect Player::bounds() const
 {
-  if (direction == Direction::Left) // && pos_.x > sprite_.getGlobalBounds().width)
+  return sf::FloatRect(getPosition().x - sprite_.getOrigin().x,
+                       getPosition().y - sprite_.getOrigin().y,
+                       sprite_.getGlobalBounds().width,
+                       sprite_.getGlobalBounds().height);
+}
+
+void Player::removeShot()
+{
+  // TODO: Handle more shots
+  shots_.clear();
+}
+
+bool Player::handleEvent(sf::Event event)
+{
+  switch (event.type)
   {
-    if (direction_ == Direction::Right)
+  case sf::Event::KeyPressed:
+    if (event.key.code == sf::Keyboard::Left)
     {
-      sprite_.setScale(-2.f, 2.f);
-      pos_.x += 64;
       direction_ = Direction::Left;
+      if (!anim_.isPlayingAnimation() || anim_.getPlayingAnimation() != "walk")
+        anim_.playAnimation("walk", true);
     }
-    else if (pos_.x > sprite_.getGlobalBounds().width)
+    else if (event.key.code == sf::Keyboard::Right)
     {
-      pos_.x--;
-    }
-  }
-  else if (direction == Direction::Right)
-  {
-    if (direction_ == Direction::Left)
-    {
-      sprite_.setScale(2.f, 2.f);
-      pos_.x -= 64;
       direction_ = Direction::Right;
+      if (!anim_.isPlayingAnimation() || anim_.getPlayingAnimation() != "walk")
+        anim_.playAnimation("walk", true);
     }
-    else if (pos_.x < window_.getSize().x - sprite_.getGlobalBounds().width)
+    else if (event.key.code == sf::Keyboard::Space && shots_.empty())
     {
-      pos_.x++;
+      direction_ = Direction::Stopped;
+      if (!anim_.isPlayingAnimation() || anim_.getPlayingAnimation() != "shoot")
+        anim_.playAnimation("shoot");
+      shots_.push_back(std::make_shared<Shot>(sf::Vector2f(getPosition().x,
+                                                           getPosition().y - getOrigin().y),
+                                              area_, sprite_.getLocalBounds().height,
+                                              resources_));
     }
+    return true;
+
+  case sf::Event::KeyReleased:
+    if (event.key.code == sf::Keyboard::Left && direction_ == Direction::Left)
+    {
+      direction_ = Direction::Stopped;
+      anim_.stopAnimation();
+    }
+    else if (event.key.code == sf::Keyboard::Right && direction_ == Direction::Right)
+    {
+      direction_ = Direction::Stopped;
+      anim_.stopAnimation();
+    }
+    else if (event.key.code == sf::Keyboard::Space)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+      {
+        direction_ = Direction::Left;
+        anim_.playAnimation("walk", true);
+      }
+      else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+      {
+        direction_ = Direction::Right;
+        anim_.playAnimation("walk", true);
+      }
+    }
+    return true;
+
+  default:
+    break;
   }
-  if (count_++ % 10 == 0)
+  return false;
+}
+
+void Player::update(sf::Time delta_time)
+{
+  for (auto& shot : shots_)
   {
-    if (++current_walk_texture_ == walk_textures_.end())
-    {
-      current_walk_texture_ = walk_textures_.begin();
-    }
-    sprite_.setTextureRect(*current_walk_texture_);
+    shot->update(delta_time);
   }
+  shots_.erase(std::remove_if(shots_.begin(), shots_.end(),
+                              [](auto shot)
+                              {
+                                return shot->bounds().top <= 0;
+                              }), shots_.end());
+  if (direction_ == Direction::Left && getPosition().x - sprite_.getLocalBounds().width > 0)
+  {
+    setScale(-2.f, 2.f);
+    move({-speed_.x * delta_time.asSeconds(), 0.f});
+  }
+  else if (direction_ == Direction::Right
+           && getPosition().x + sprite_.getGlobalBounds().width < area_.width)
+  {
+    setScale(2.f, 2.f);
+    move({speed_.x * delta_time.asSeconds(), 0.f});
+  }
+  else if (direction_ == Direction::Stopped)
+  {
+  }
+  anim_.update(delta_time);
+  anim_.animate(sprite_);
 }
 
-void Player::stand()
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-  current_walk_texture_ = walk_textures_.begin();
-  sprite_.setTextureRect(*current_walk_texture_);
+  states.transform *= getTransform();
+  target.draw(sprite_, states);
 }
-
-void Player::shoot()
-{
-  sprite_.setTextureRect(sf::IntRect(10, 112, 32, 32));
-}
-
-void Player::draw()
-{
-  sprite_.setPosition(pos_.x, pos_.y);
-  window_.draw(sprite_);
-}
-
-std::shared_ptr<sf::Texture> Player::texture_;

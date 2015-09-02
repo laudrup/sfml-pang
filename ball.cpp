@@ -1,51 +1,85 @@
 #include "ball.h"
 
+#include <iostream>
 #include <cassert>
 
-Ball::Ball(sf::RenderWindow& window, sf::Vector2f pos, Type type, sf::Color color,
-           Direction direction)
-  : window_(window),
-    pos_(pos),
-    radius_(type_properties_.at(type).radius),
-    velocity_(type_properties_.at(type).velocity),
-    angle_(M_PI * 2 / 5),
-    type_(type),
-    color_(color)
+namespace res = thor::Resources;
+
+Ball::Ball(Type type, sf::Color color, sf::Vector2f position,
+           Direction direction, const sf::IntRect& area,
+           thor::ResourceHolder<sf::Texture, std::string>* resources)
+  : type_(type),
+    velocity_(10.f * static_cast<int>(direction), -20.f), area_(area),
+    texture_(&resources->acquire("ball", res::fromFile<sf::Texture>("gfx/ball.png"),
+                                 res::Reuse)),
+    resources_(resources)
 {
-  x_velocity_ = std::cos(angle_) * velocity_;
-  y_velocity_ = -(std::sin(angle_) * velocity_);
-
-  if(pos.x + radius_ * 2 >= window_.getSize().x)
+  switch (type)
   {
-    pos_.x = window_.getSize().x - radius_ * 2;
+  case Type::Large:
+    setRadius(50.f);
+    mass_ = 15.f;
+    break;
+  case Type::Medium:
+    setRadius(40.f);
+    mass_ = 20.f;
+    break;
+  case Type::Small:
+    setRadius(25.f);
+    mass_ = 25.f;
+    break;
+  case Type::Tiny:
+    setRadius(12.f);
+    mass_ = 50.f;
+    break;
   }
-  assert(pos.y + radius_ * 2 <= window_.getSize().y);
-
-  if (direction == Direction::West)
-  {
-    x_velocity_ = -x_velocity_;
-  }
-
-  if (!texture_)
-  {
-    texture_ = std::make_shared<sf::Texture>();
-    if (!texture_->loadFromFile("gfx/ball.png"))
-    {
-      abort();
-    }
-    texture_->setSmooth(true);
-  }
-  sprite_.setTexture(texture_.get());
-  sprite_.setRadius(radius_);
-  sprite_.setFillColor(color);
+  setFillColor(color);
+  setOrigin(getRadius(), getRadius());
+  setPosition(position);
+  texture_->setSmooth(true);
+  setTexture(texture_);
 }
 
-Ball::Type Ball::type() const
+void Ball::update(const sf::Vector2f gravity, const sf::Time delta_time)
 {
-  return type_;
+  velocity_ = velocity_ + (gravity * delta_time.asSeconds())
+    * (mass_ *delta_time.asSeconds());
+  sf::Vector2f new_pos = getPosition() + velocity_;
+
+  if (new_pos.x - getRadius() < area_.left) // left edge
+  {
+    velocity_.x *= -1;
+    new_pos.x = area_.left + getRadius();
+  }
+  else if (new_pos.x + getRadius() >= area_.width + area_.left) // right edge
+  {
+    velocity_.x *= -1;
+    new_pos.x = area_.width - getRadius();
+  }
+  else if (new_pos.y - getRadius() < area_.top) // top of window
+  {
+    velocity_.y *= -1;
+    new_pos.y = area_.top + getRadius();
+  }
+  else if (new_pos.y + getRadius() >= area_.height + area_.top) // bottom of window
+  {
+    velocity_.y = gravity.y;
+    velocity_.y *= -1;
+    new_pos.y = area_.height + area_.top - getRadius();
+  }
+  setPosition(new_pos);
 }
 
-std::pair<std::shared_ptr<Ball>, std::shared_ptr<Ball>> Ball::split() const
+sf::FloatRect Ball::bounds() const
+{
+  return sf::FloatRect(getPosition().x - getOrigin().x,
+                       getPosition().y - getOrigin().y,
+                       getGlobalBounds().width,
+                       getGlobalBounds().height);
+}
+
+
+std::pair<Ball, Ball> Ball::split() const
 {
   Type type;
   switch(type_)
@@ -62,67 +96,13 @@ std::pair<std::shared_ptr<Ball>, std::shared_ptr<Ball>> Ball::split() const
   case Ball::Type::Tiny:
     abort();
   }
+  const auto pos = getPosition();
 
-  float x_pos = pos_.x + radius_ - type_properties_.at(type).radius;
-  if (x_pos + type_properties_.at(type).radius * 2 > window_.getSize().x)
+  return
   {
-    x_pos = window_.getSize().x - type_properties_.at(type).radius * 2;
-  }
-
-  return {
-    std::make_shared<Ball>(window_, sf::Vector2f(x_pos, pos_.y),
-                           type, color_, Ball::Direction::West),
-    std::make_shared<Ball>(window_, sf::Vector2f(x_pos, pos_.y),
-                             type, color_, Ball::Direction::East)
-    };
+    Ball(type, getFillColor(), sf::Vector2f(pos.x, pos.y),
+         Ball::Direction::West, area_, resources_),
+    Ball(type, getFillColor(), sf::Vector2f(pos.x, pos.y),
+         Ball::Direction::East, area_, resources_)
+  };
 }
-
-sf::Color Ball::color() const
-{
-  return color_;
-}
-
-void Ball::move()
-{
-  if (pos_.x < 0 || pos_.x + sprite_.getGlobalBounds().width > window_.getSize().x)
-  {
-    x_velocity_ = -x_velocity_;
-  }
-  if (pos_.y < 0)
-  {
-    y_velocity_ = std::sin(angle_) * velocity_;
-  }
-  else if (pos_.y + radius_ * 2 > window_.getSize().y)
-  {
-    y_velocity_ = -(std::sin(angle_) * velocity_);
-  }
-  y_velocity_ += 0.214F;
-  pos_.x += x_velocity_ / 10;
-  pos_.y += y_velocity_ / 10;
-}
-
-void Ball::draw()
-{
-  sprite_.setPosition(pos_.x, pos_.y);
-  window_.draw(sprite_);
-}
-
-bool Ball::hasPoint(int x, int y) const
-{
-  sf::FloatRect boundingBox = sprite_.getGlobalBounds();
-
-  if (boundingBox.contains(sf::Vector2f(x, y)))
-  {
-    return true;
-  }
-  return false;
-}
-
-const std::map<Ball::Type, Ball::TypeProperties> Ball::type_properties_ = {
-  { Ball::Type::Large, { 40.f, 40.f } },
-  { Ball::Type::Medium, { 30.f, 35.f } },
-  { Ball::Type::Small, { 20.f, 30.f } },
-  { Ball::Type::Tiny, { 10.f, 20.f } }
-};
-
-std::shared_ptr<sf::Texture> Ball::texture_;

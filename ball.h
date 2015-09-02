@@ -3,9 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <memory>
+#include <Thor/Resources.hpp>
 
-class Ball
+class Ball : public sf::CircleShape
 {
 public:
   enum class Type
@@ -17,44 +17,23 @@ public:
   };
   enum class Direction : int
   {
-    West,
-    East
+    West = -1,
+    East = 1
   };
-
-  Ball(sf::RenderWindow& window, sf::Vector2f pos, Type type, sf::Color color,
-       Direction direction);
-
-  Type type() const;
-
-  std::pair<std::shared_ptr<Ball>, std::shared_ptr<Ball>> split() const;
-
-  sf::Color color() const;
-
-  void move();
-
-  void draw();
-
-  bool hasPoint(int x, int y) const;
-
+  Ball(Type type, sf::Color color, sf::Vector2f position,
+       Direction direction, const sf::IntRect& area,
+       thor::ResourceHolder<sf::Texture, std::string>* resources);
+  void update(const sf::Vector2f gravity, const sf::Time delta_time);
+  sf::FloatRect bounds() const;
+  std::pair<Ball, Ball> split() const;
+  Type type() const { return type_; }
 private:
-  struct TypeProperties
-  {
-    float radius;
-    float velocity;
-  };
-
-  sf::RenderWindow& window_;
-  sf::Vector2f pos_;
-  float radius_;
-  float velocity_;
-  float angle_;
-  float x_velocity_;
-  float y_velocity_;
   Type type_;
-  sf::Color color_;
-  sf::CircleShape sprite_;
-  static std::shared_ptr<sf::Texture> texture_;
-  static const std::map<Type, TypeProperties> type_properties_;
+  float mass_;
+  sf::Vector2f velocity_;
+  sf::IntRect area_;
+  sf::Texture* texture_;
+  thor::ResourceHolder<sf::Texture, std::string>* resources_;
 };
 
 #endif // BALL_H
