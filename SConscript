@@ -9,7 +9,7 @@ elif platform.system() == "Windows":
                LIBPATH=["SFML/lib/", "Thor/lib"],
                CXXFLAGS=["-EHsc", "-Z7"])
 
-SOURCES = ["main.cpp", "ball.cpp", "player.cpp", "shot.cpp", "background.cpp", "collision.cpp"]
+SOURCES = ["main.cpp", "ball.cpp", "player.cpp", "shot.cpp", "background.cpp"]
 LIBS = ["sfml-graphics", "sfml-window", "sfml-system", "thor"]
 
 env.Program("test_sfml", SOURCES, LIBS=LIBS)#, CXX="clang++")
