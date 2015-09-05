@@ -5,8 +5,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "collision.h"
-
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
@@ -23,8 +21,8 @@ int main()
   Background background(window.getSize(), resources);
   auto area = sf::IntRect(8 * background.scale().x,
                           8 * background.scale().y,
-                          window.getSize().x - 16 * background.scale().x,
-                          window.getSize().y - 16 * background.scale().y);
+                          background.size().x - 16 * background.scale().x,
+                          background.size().y - 16 * background.scale().y);
   std::vector<Ball> balls = {
     Ball(Ball::Type::Large, sf::Color::Red, {800 / 3, 600 / 2}, Ball::Direction::East,
          area, &resources),
