@@ -1,17 +1,16 @@
 import platform
 
-env = Environment(CXX="clang++")
+env = Environment()
 
 if platform.system() == "Linux":
     env.Append(CXXFLAGS=["-Wall", "-std=c++14", "-g"])
 elif platform.system() == "Windows":
-    env.Append(CPPPATH=["SFML/include/", "Thor/include"],
+    env.Append(CPPPATH=["SFML/include", "Thor/include"],
                LIBPATH=["SFML/lib/", "Thor/lib"],
-               CXXFLAGS=["-EHsc", "-Z7"])
+               CXXFLAGS=["-EHsc", "-Z7"],
+               TARGET_ARCH="x86")
 
 SOURCES = ["main.cpp", "ball.cpp", "player.cpp", "shot.cpp", "background.cpp"]
 LIBS = ["sfml-graphics", "sfml-window", "sfml-system", "thor"]
 
-env.Program("test_sfml", SOURCES, LIBS=LIBS)#, CXX="clang++")
-
-#, LIBS = LIBS, CXX="clang++", CXXFLAGS=["-g", "-Wall", "-std=c++14"])
+env.Program("test_sfml", SOURCES, LIBS=LIBS)
