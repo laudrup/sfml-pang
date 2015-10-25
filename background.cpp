@@ -9,9 +9,12 @@ Background::Background(const sf::Vector2u& area,
 {
   sprite_.setTexture(resources.acquire("background",
                                        res::fromFile<sf::Texture>("gfx/background.png")));
-  sprite_.setTextureRect(sf::IntRect(8, 8, 384, 208));
-  sprite_.setScale(area.x / sprite_.getLocalBounds().width,
-                   area.y / sprite_.getLocalBounds().height);
+  for (int i = 8; i < 25 * (208 + 8); i += 216)
+  {
+    textures_.push_back(sf::IntRect(8, i, 384, 208));
+    textures_.push_back(sf::IntRect(400, i, 384, 208));
+  }
+  sprite_.setTextureRect(textures_[0]);
 }
 
 void Background::draw(sf::RenderTarget& target, sf::RenderStates states) const
