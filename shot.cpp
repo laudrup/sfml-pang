@@ -1,7 +1,5 @@
 #include "shot.h"
 
-#include <iostream>
-
 namespace res = thor::Resources;
 
 Shot::Shot(sf::Vector2f pos, const sf::IntRect& area, float initial_height,
@@ -11,10 +9,8 @@ Shot::Shot(sf::Vector2f pos, const sf::IntRect& area, float initial_height,
   setTexture(&resources.acquire("shot",
                                 res::fromFile<sf::Texture>("gfx/shot.png"),
                                 res::Reuse));
-  setScale(2.f, area.height / static_cast<float>(textures_.begin()->height));
-  setSize({static_cast<float>(textures_.begin()->width), initial_height / getScale().y * 2});
-  setOrigin(0.f, 0.f);
-  setPosition(pos.x, pos.y - getGlobalBounds().height / 2.f);
+  setSize({static_cast<float>(textures_.begin()->width), initial_height});
+  setPosition(pos.x, pos.y - initial_height);
   for (const auto& rect : textures_)
   {
     shot_anim_.addFrame(1.f, rect);
@@ -34,7 +30,7 @@ sf::FloatRect Shot::bounds() const
 void Shot::update(sf::Time delta_time)
 {
   move({speed_.x, speed_.y * -delta_time.asSeconds()});
-  setSize({getSize().x, getSize().y + speed_.y * delta_time.asSeconds() / getScale().y});
+  setSize({getSize().x, getSize().y + speed_.y * delta_time.asSeconds()});
 
   anim_.update(delta_time);
   anim_.animate(*this);

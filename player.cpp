@@ -1,7 +1,5 @@
 #include "player.h"
 
-#include <iostream>
-
 namespace res = thor::Resources;
 
 Player::Player(sf::Vector2f pos, const sf::IntRect& area,
@@ -17,10 +15,9 @@ Player::Player(sf::Vector2f pos, const sf::IntRect& area,
   }
   img.createMaskFromColor(sf::Color::Green);
   sprite_.setTexture(resources.acquire("player", res::fromImage<sf::Texture>(img)));
-  setScale(2.f, 2.f);
   sprite_.setTextureRect(*walk_textures_.begin());
   sprite_.setOrigin(sprite_.getLocalBounds().width / 2,
-                    sprite_.getLocalBounds().height / 2);
+                    sprite_.getLocalBounds().height);
   setPosition(pos.x, pos.y + sprite_.getLocalBounds().height / 2);
   for (const auto& rect : walk_textures_)
   {
@@ -72,7 +69,7 @@ bool Player::handleEvent(sf::Event event)
       if (!anim_.isPlayingAnimation() || anim_.getPlayingAnimation() != "shoot")
         anim_.playAnimation("shoot");
       shots_.push_back(std::make_shared<Shot>(sf::Vector2f(getPosition().x,
-                                                           getPosition().y - getOrigin().y),
+                                                           getPosition().y),
                                               area_, sprite_.getLocalBounds().height,
                                               resources_));
     }
@@ -121,16 +118,23 @@ void Player::update(sf::Time delta_time)
                               {
                                 return shot->bounds().top <= 0;
                               }), shots_.end());
-  if (direction_ == Direction::Left && getPosition().x - sprite_.getLocalBounds().width > 0)
+  if (direction_ == Direction::Left)
   {
-    setScale(-2.f, 2.f);
+    setScale(-1.f, 1.f);
     move({-speed_.x * delta_time.asSeconds(), 0.f});
+    if (getPosition().x - sprite_.getLocalBounds().width / 2 < 8)
+    {
+      setPosition(8 + sprite_.getLocalBounds().width / 2, getPosition().y);
+    }
   }
-  else if (direction_ == Direction::Right
-           && getPosition().x + sprite_.getGlobalBounds().width < area_.width)
+  else if (direction_ == Direction::Right)
   {
-    setScale(2.f, 2.f);
+    setScale(1.f, 1.f);
     move({speed_.x * delta_time.asSeconds(), 0.f});
+    if (getPosition().x + sprite_.getLocalBounds().width / 2 > area_.width + 8)
+    {
+      setPosition(area_.width + 8 - sprite_.getLocalBounds().width / 2, getPosition().y);
+    }
   }
   else if (direction_ == Direction::Stopped)
   {

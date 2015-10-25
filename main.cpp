@@ -16,29 +16,26 @@
 int main()
 {
   thor::ResourceHolder<sf::Texture, std::string> resources;
-  sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
-  window.setFramerateLimit(60);
+  sf::RenderWindow window(sf::VideoMode(384 * 2, 208 * 2), "SFML works!");
+  sf::View view(sf::FloatRect(0, 0, 384, 208));
+  window.setView(view);
   Background background(window.getSize(), resources);
-  auto area = sf::IntRect(8 * background.scale().x,
-                          8 * background.scale().y,
-                          background.size().x - 16 * background.scale().x,
-                          background.size().y - 16 * background.scale().y);
+  auto area = sf::IntRect(8, 8, background.size().x - 16, background.size().y - 16);
   std::vector<Ball> balls = {
-    Ball(Ball::Type::Large, sf::Color::Red, {800 / 3, 600 / 2}, Ball::Direction::East,
+    Ball(Ball::Type::Large, sf::Color::Red, {384 / 3, 208 / 2}, Ball::Direction::East,
          area, &resources),
-    Ball(Ball::Type::Medium, sf::Color::Yellow, {800 / 2, 600 / 2}, Ball::Direction::East,
+    Ball(Ball::Type::Medium, sf::Color::Yellow, {384 / 2, 208 / 2}, Ball::Direction::East,
          area, &resources),
-    Ball(Ball::Type::Small, sf::Color::Green, {800 / 3, 600 / 2}, Ball::Direction::East,
+    Ball(Ball::Type::Small, sf::Color::Green, {384 / 3, 208 / 2}, Ball::Direction::East,
          area, &resources),
-    Ball(Ball::Type::Tiny, sf::Color::Blue, {800 / 1.5, 600 / 3}, Ball::Direction::West,
+    Ball(Ball::Type::Tiny, sf::Color::Blue, {384 / 1.5, 208 / 3}, Ball::Direction::West,
          area, &resources)
          };
-  Player player(sf::Vector2f(area.width / 2, area.height - 8 * background.scale().y),
-                area, resources);
+  Player player(sf::Vector2f(area.width / 2, area.height - 8), area, resources);
   sf::Clock clock;
   sf::Clock AITimer;
   const sf::Time ai_time = sf::seconds(1.f) / 20.f;
-  const sf::Vector2f gravity(0.f, 30.f);
+  const sf::Vector2f gravity(0.f, 5.f);
   sf::Time elapsed_time = clock.restart();
   while (window.isOpen())
   {

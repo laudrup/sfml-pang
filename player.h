@@ -46,7 +46,7 @@ private:
   thor::FrameAnimation walk_anim_;
   thor::FrameAnimation shoot_anim_;
   thor::Animator<sf::Sprite, std::string> anim_;
-  const sf::Vector2f speed_ {200.f, 200.f};
+  const sf::Vector2f speed_ {120.f, 120.f};
   std::vector<std::shared_ptr<Shot>> shots_;
   thor::ResourceHolder<sf::Texture, std::string>& resources_;
 };
