@@ -9,7 +9,7 @@ Ball::Ball(Type type, sf::Color color, sf::Vector2f position,
            Direction direction, const sf::IntRect& area,
            thor::ResourceHolder<sf::Texture, std::string>* resources)
   : type_(type),
-    velocity_(10.f * static_cast<int>(direction), -20.f), area_(area),
+    velocity_(1.5f * static_cast<int>(direction), -5.f), area_(area),
     texture_(&resources->acquire("ball", res::fromFile<sf::Texture>("gfx/ball.png"),
                                  res::Reuse)),
     resources_(resources)
@@ -17,20 +17,20 @@ Ball::Ball(Type type, sf::Color color, sf::Vector2f position,
   switch (type)
   {
   case Type::Large:
-    setRadius(50.f);
+    setRadius(12.5f);
     mass_ = 15.f;
     break;
   case Type::Medium:
-    setRadius(40.f);
+    setRadius(10.f);
     mass_ = 20.f;
     break;
   case Type::Small:
-    setRadius(25.f);
+    setRadius(6.5f);
     mass_ = 25.f;
     break;
   case Type::Tiny:
-    setRadius(12.f);
-    mass_ = 50.f;
+    setRadius(3.f);
+    mass_ = 30.f;
     break;
   }
   setFillColor(color);
@@ -54,7 +54,7 @@ void Ball::update(const sf::Vector2f gravity, const sf::Time delta_time)
   else if (new_pos.x + getRadius() >= area_.width + area_.left) // right edge
   {
     velocity_.x *= -1;
-    new_pos.x = area_.width - getRadius();
+    new_pos.x = area_.width + area_.left - getRadius();
   }
   else if (new_pos.y - getRadius() < area_.top) // top of window
   {
