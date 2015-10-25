@@ -7,7 +7,8 @@ if platform.system() == "Linux":
 elif platform.system() == "Windows":
     env.Append(CPPPATH=["SFML/include", "Thor/include"],
                LIBPATH=["SFML/lib/", "Thor/lib"],
-               CXXFLAGS=["-EHsc", "-Z7"])
+               CXXFLAGS=["-EHsc", "-Z7"],
+               TARGET_ARCH="x86")
 
 SOURCES = ["main.cpp", "ball.cpp", "player.cpp", "shot.cpp", "background.cpp"]
 LIBS = ["sfml-graphics", "sfml-window", "sfml-system", "thor"]
