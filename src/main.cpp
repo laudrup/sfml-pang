@@ -19,8 +19,8 @@ int main()
   sf::RenderWindow window(sf::VideoMode(384 * 2, 208 * 2), "SFML works!");
   sf::View view(sf::FloatRect(0, 0, 384, 208));
   window.setView(view);
-  Background background(window.getSize(), resources);
   auto area = sf::IntRect(8, 8, background.size().x - 16, background.size().y - 16);
+  Background background(window.getSize());
   std::vector<Ball> balls = {
     Ball(Ball::Type::Large, sf::Color::Red, {384 / 3, 208 / 2}, Ball::Direction::East,
          area, &resources),

@@ -1,20 +1,18 @@
 #include "background.h"
 
-#include <iostream>
-
-namespace res = thor::Resources;
-
-Background::Background(const sf::Vector2u& area,
-                       thor::ResourceHolder<sf::Texture, std::string>& resources)
+Background::Background(const sf::Vector2u& area)
 {
-  sprite_.setTexture(resources.acquire("background",
-                                       res::fromFile<sf::Texture>("gfx/background.png")));
+  sf::Image bg_image;
+  bg_image.loadFromFile("gfx/background.png");
+  sf::Texture texture;
   for (int i = 8; i < 25 * (208 + 8); i += 216)
   {
-    textures_.push_back(sf::IntRect(8, i, 384, 208));
-    textures_.push_back(sf::IntRect(400, i, 384, 208));
+    texture.loadFromImage(bg_image, sf::IntRect(8, i, 384, 208));
+    textures_.push_back(texture);
+    texture.loadFromImage(bg_image, sf::IntRect(400, i, 384, 208));
+    textures_.push_back(texture);
   }
-  sprite_.setTextureRect(textures_[0]);
+  sprite_.setTexture(textures_[1]);
 }
 
 void Background::draw(sf::RenderTarget& target, sf::RenderStates states) const
