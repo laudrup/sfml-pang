@@ -1,19 +1,30 @@
-include(ExternalProject)
+include(FetchContent)
 
-ExternalProject_Add(thor_external
+Set(FETCHCONTENT_QUIET FALSE)
+
+FetchContent_Declare(
+  thor
   GIT_REPOSITORY https://github.com/Bromeon/Thor.git
   GIT_TAG v2.0
-  CMAKE_CACHE_ARGS -DTHOR_SHARED_LIBS:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-  UPDATE_COMMAND ""
-  BUILD_BYPRODUCTS <INSTALL_DIR>/lib/libthor-s.a
+  GIT_PROGRESS TRUE
 )
 
-ExternalProject_Get_property(thor_external INSTALL_DIR)
+FetchContent_GetProperties(thor)
+if(NOT thor_POPULATED)
+  FetchContent_Populate(thor)
+  set(THOR_SHARED_LIBS FALSE CACHE BOOL "Build shared Thor libs")
+  set(SFML_STATIC_LIBRARIES TRUE)
+  add_subdirectory(${thor_SOURCE_DIR} ${thor_BINARY_DIR})
+endif()
 
-# Work around CMake bug #15052
-file(MAKE_DIRECTORY ${INSTALL_DIR}/include)
-
-add_library(thor STATIC IMPORTED GLOBAL)
-target_include_directories(thor INTERFACE ${INSTALL_DIR}/include)
-set_target_properties(thor PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libthor-s.a)
-add_dependencies(thor thor_external)
+# Make thor a CMake linkable target by adding libraries and
+# directories.
+# Can hopefully be removed when upgrading thor library
+target_link_libraries(thor PUBLIC
+  sfml-window
+  sfml-graphics
+)
+target_include_directories(thor PUBLIC
+  ${thor_SOURCE_DIR}/extlibs/aurora/include
+  ${thor_SOURCE_DIR}/include
+)
