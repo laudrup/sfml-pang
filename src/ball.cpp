@@ -18,19 +18,19 @@ Ball::Ball(Type type, sf::Color color, sf::Vector2f position,
   {
   case Type::Large:
     setRadius(12.5f);
-    mass_ = 15.f;
+    mass_ = 6.f;
     break;
   case Type::Medium:
     setRadius(10.f);
-    mass_ = 20.f;
+    mass_ = 12.f;
     break;
   case Type::Small:
     setRadius(6.5f);
-    mass_ = 25.f;
+    mass_ = 18.f;
     break;
   case Type::Tiny:
     setRadius(3.f);
-    mass_ = 30.f;
+    mass_ = 24.f;
     break;
   }
   setFillColor(color);
