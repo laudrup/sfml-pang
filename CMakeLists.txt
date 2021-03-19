@@ -4,13 +4,6 @@ project(pang CXX)
 
 add_subdirectory(thirdparty)
 
-find_package(SFML
-  COMPONENTS
-  system
-  window
-  graphics
-  REQUIRED
-)
 
 add_executable(${PROJECT_NAME}
   src/main.cpp
@@ -21,8 +14,8 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  thor
+  sfml-graphics
   sfml-system
   sfml-window
-  sfml-graphics
+  thor
 )
