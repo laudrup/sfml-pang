@@ -23,12 +23,15 @@ public:
   Ball(Type type, sf::Color color, sf::Vector2f position,
        Direction direction, const sf::IntRect& area,
        thor::ResourceHolder<sf::Texture, std::string>* resources);
-  void update(const sf::Vector2f gravity, const sf::Time delta_time);
+  void update(const sf::Time delta_time);
   sf::FloatRect bounds() const;
   std::pair<Ball, Ball> split() const;
   Type type() const { return type_; }
+  Direction direction() const { return direction_; }
+
 private:
   Type type_;
+  Direction direction_;
   float mass_;
   sf::Vector2f velocity_;
   sf::IntRect area_;

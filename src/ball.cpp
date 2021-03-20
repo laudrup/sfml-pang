@@ -9,6 +9,7 @@ Ball::Ball(Type type, sf::Color color, sf::Vector2f position,
            Direction direction, const sf::IntRect& area,
            thor::ResourceHolder<sf::Texture, std::string>* resources)
   : type_(type),
+    direction_(direction),
     velocity_(1.5f * static_cast<int>(direction), -5.f), area_(area),
     texture_(&resources->acquire("ball", res::fromFile<sf::Texture>("gfx/ball.png"),
                                  res::Reuse)),
@@ -40,32 +41,35 @@ Ball::Ball(Type type, sf::Color color, sf::Vector2f position,
   setTexture(texture_);
 }
 
-void Ball::update(const sf::Vector2f gravity, const sf::Time delta_time)
+void Ball::update(const sf::Time delta_time)
 {
+  const sf::Vector2f gravity(0.f, 5.f);
   velocity_ = velocity_ + (gravity * delta_time.asSeconds())
-    * (mass_ *delta_time.asSeconds());
+    * (mass_ * delta_time.asSeconds());
   sf::Vector2f new_pos = getPosition() + velocity_;
 
-  if (new_pos.x - getRadius() < area_.left) // left edge
+  if (new_pos.x - getRadius() <= 8) // left edge
   {
     velocity_.x *= -1;
-    new_pos.x = area_.left + getRadius();
+    direction_ = static_cast<Direction>(static_cast<int>(direction_) * -1);
+    new_pos.x = area_.left + getRadius() + 8;
   }
-  else if (new_pos.x + getRadius() >= area_.width + area_.left) // right edge
+  else if (new_pos.x + getRadius() >= area_.width - 8) // right edge
   {
     velocity_.x *= -1;
-    new_pos.x = area_.width + area_.left - getRadius();
+    direction_ = static_cast<Direction>(static_cast<int>(direction_) * -1);
+    new_pos.x = area_.width - getRadius() - 8;
   }
-  else if (new_pos.y - getRadius() < area_.top) // top of window
+  else if (new_pos.y - getRadius() < 8) // top of window
   {
     velocity_.y *= -1;
-    new_pos.y = area_.top + getRadius();
+    new_pos.y = area_.top + getRadius() + 8;
   }
-  else if (new_pos.y + getRadius() >= area_.height + area_.top) // bottom of window
+  else if (new_pos.y + getRadius() >= area_.height - 8) // bottom of window
   {
     velocity_.y = gravity.y;
     velocity_.y *= -1;
-    new_pos.y = area_.height + area_.top - getRadius();
+    new_pos.y = area_.height - getRadius() - 8;
   }
   setPosition(new_pos);
 }
