@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 project(pang CXX)
 
 add_subdirectory(thirdparty)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 add_executable(${PROJECT_NAME}
