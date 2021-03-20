@@ -4,7 +4,7 @@ Pang game implemented using SFML
 An attempt at reimplementing the classic Pang game using SFML I wrote ages ago.
 
 Very, very far from being a complete implementation just placed here
-in case someone might find it useful as a personal backup.
+in case someone might find it useful and as a personal backup.
 
 Note on graphics
 ----------------
