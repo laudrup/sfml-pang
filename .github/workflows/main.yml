@@ -9,7 +9,16 @@ jobs:
     - name: Install APT packages
       env:
         DEBIAN_FRONTEND: noninteractive
-      run: sudo apt-get -yq install libxrandr-dev libglu1-mesa-dev libudev-dev libfreetype6-dev libalut-dev libvorbis-dev libflac-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get -yq install \
+        libxrandr-dev \
+        libglu1-mesa-dev \
+        libudev-dev \
+        libfreetype6-dev \
+        libalut-dev \
+        libvorbis-dev \
+        libflac-dev
     - name: Checkout
       uses: actions/checkout@v2
     - name: Configure
