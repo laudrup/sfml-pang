@@ -3,10 +3,20 @@ name: build
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    name: Build code
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
     - name: Install APT packages
+      if: matrix.platform == 'ubuntu-latest'
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -22,8 +32,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Configure
-      shell: bash
       run: cmake -B build
     - name: Build
-      shell: bash
       run: cmake --build build/
