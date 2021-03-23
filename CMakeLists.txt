@@ -21,3 +21,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   sfml-window
   thor
 )
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
