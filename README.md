@@ -1,10 +1,19 @@
 Pang game implemented using SFML
 ================================
+![](https://raw.githubusercontent.com/laudrup/sfml-pang/master/screenshot.png)
 
-An attempt at reimplementing the classic Pang game using SFML I wrote ages ago.
+Build status
+------------
+[![](http://github-actions.40ants.com/laudrup/sfml-pang/matrix.svg)](https://github.com/laudrup/sfml-pang)
 
-Very, very far from being a complete implementation just placed here
-in case someone might find it useful and as a personal backup.
+About
+-----
+An attempt at reimplementing the classic Pang game using SFML I wrote
+ages ago.
+
+Very far from being a complete implementation and mostly just for
+personal experiments with SFML and basic 2D gaming, but sort of
+playable.
 
 Note on graphics
 ----------------
