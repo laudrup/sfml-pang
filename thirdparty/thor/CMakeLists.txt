@@ -1,30 +1,33 @@
-include(FetchContent)
+include(ExternalProject)
 
-Set(FETCHCONTENT_QUIET FALSE)
-
-FetchContent_Declare(
-  thor
+ExternalProject_Add(thor_external
   GIT_REPOSITORY https://github.com/Bromeon/Thor.git
   GIT_TAG v2.0
-  GIT_PROGRESS TRUE
+  CMAKE_ARGS -DSFML_ROOT:PATH=${SFML_ROOT} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  UPDATE_COMMAND ""
+  BUILD_BYPRODUCTS <INSTALL_DIR>/lib/libthor.so # Only used by Ninja generator
 )
 
-FetchContent_GetProperties(thor)
-if(NOT thor_POPULATED)
-  FetchContent_Populate(thor)
-  set(THOR_SHARED_LIBS FALSE CACHE BOOL "Build shared Thor libs")
-  set(SFML_STATIC_LIBRARIES TRUE)
-  add_subdirectory(${thor_SOURCE_DIR} ${thor_BINARY_DIR})
+ExternalProject_Add_StepDependencies(thor_external download
+  ${CMAKE_CURRENT_LIST_FILE}
+)
+
+ExternalProject_Get_Property(thor_external INSTALL_DIR)
+
+# Work around CMake bug #15052
+file(MAKE_DIRECTORY ${INSTALL_DIR}/include)
+
+add_library(thor SHARED IMPORTED GLOBAL)
+target_include_directories(thor INTERFACE ${INSTALL_DIR}/include)
+if(CMAKE_GENERATOR MATCHES "Visual Studio")
+  set_target_properties(thor PROPERTIES IMPORTED_IMPLIB_RELEASE ${INSTALL_DIR}/lib/thor.lib)
+  set_target_properties(thor PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/bin/thor.dll)
+  set_target_properties(thor PROPERTIES IMPORTED_IMPLIB_DEBUG ${INSTALL_DIR}/lib/thor-d.lib)
+  set_target_properties(thor PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/bin/thor-d.dll)
+elseif(APPLE)
+  set_target_properties(thor PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libthor.dylib)
+else()
+  set_target_properties(thor PROPERTIES IMPORTED_LOCATION ${INSTALL_DIR}/lib/libthor.so)
 endif()
 
-# Make thor a CMake linkable target by adding libraries and
-# directories.
-# Can hopefully be removed when upgrading thor library
-target_link_libraries(thor PUBLIC
-  sfml-window
-  sfml-graphics
-)
-target_include_directories(thor PUBLIC
-  ${thor_SOURCE_DIR}/extlibs/aurora/include
-  ${thor_SOURCE_DIR}/include
-)
+add_dependencies(thor thor_external)

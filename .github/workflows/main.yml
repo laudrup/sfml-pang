@@ -15,6 +15,8 @@ jobs:
         shell: bash
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Install APT packages
       if: matrix.platform == 'ubuntu-latest'
       env:
@@ -22,16 +24,24 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -yq install \
-        libxrandr-dev \
-        libglu1-mesa-dev \
-        libudev-dev \
-        libfreetype6-dev \
         libalut-dev \
+        libflac-dev \
+        libfreetype6-dev \
+        libglu1-mesa-dev \
+        libsfml-dev \
+        libudev-dev \
         libvorbis-dev \
-        libflac-dev
-    - name: Checkout
-      uses: actions/checkout@v2
+        libxrandr-dev
+    - name: Install homebrew packages
+      if: matrix.platform == 'macos-latest'
+      run: brew install sfml
+    - name: Download and extract SFML
+      if: matrix.platform == 'windows-latest'
+      run: |
+        curl -OL https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip
+        unzip SFML-2.5.1-windows-vc15-64-bit.zip
+        echo "SFML_ROOT=$(pwd)/SFML-2.5.1" >> $GITHUB_ENV
     - name: Configure
-      run: cmake -B build
+      run: cmake -DSFML_ROOT=${SFML_ROOT} -B build
     - name: Build
       run: cmake --build build/
