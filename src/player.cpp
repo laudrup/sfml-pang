@@ -154,7 +154,7 @@ void Player::update(sf::Time delta_time)
   shots_.erase(std::remove_if(shots_.begin(), shots_.end(),
                               [](auto shot)
                               {
-                                return shot->bounds().top <= 0;
+                                return shot->bounds().top <= 8;
                               }), shots_.end());
   if (direction_ == Direction::Left)
   {
