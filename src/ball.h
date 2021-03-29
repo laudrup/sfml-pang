@@ -5,29 +5,33 @@
 
 #include <Thor/Resources.hpp>
 
-class Ball : public sf::CircleShape
-{
+class Ball : public sf::CircleShape {
 public:
-  enum class Type
-  {
+  enum class Type {
     Large,
     Medium,
     Small,
-    Tiny
+    Tiny,
   };
-  enum class Direction : int
-  {
+  enum class Direction : int {
     West = -1,
-    East = 1
+    East = 1,
   };
-  Ball(Type type, sf::Color color, sf::Vector2f position,
-       Direction direction, const sf::IntRect& area,
+  Ball(Type type,
+       sf::Color color,
+       sf::Vector2f position,
+       Direction direction,
+       const sf::IntRect& area,
        thor::ResourceHolder<sf::Texture, std::string>* resources);
   void update(const sf::Time delta_time);
   sf::FloatRect bounds() const;
   std::pair<Ball, Ball> split() const;
-  Type type() const { return type_; }
-  Direction direction() const { return direction_; }
+  Type type() const {
+    return type_;
+  }
+  Direction direction() const {
+    return direction_;
+  }
 
 private:
   Type type_;

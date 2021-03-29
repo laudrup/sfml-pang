@@ -5,13 +5,15 @@
 
 #include <Thor/Resources.hpp>
 
-class Background : public sf::Drawable
-{
+class Background : public sf::Drawable {
 public:
   Background(const sf::Vector2u& area);
-  sf::Vector2f scale() const { return sprite_.getScale(); }
+  sf::Vector2f scale() const {
+    return sprite_.getScale();
+  }
   sf::Vector2f size() const {
-    return {sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height}; }
+    return {sprite_.getGlobalBounds().width, sprite_.getGlobalBounds().height};
+  }
 
 private:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

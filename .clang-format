@@ -1,0 +1,21 @@
+AllowShortFunctionsOnASingleLine: false
+AllowShortLambdasOnASingleLine: false
+ColumnLimit: 120
+PointerAlignment: Left
+BreakConstructorInitializersBeforeComma: true
+BinPackArguments: false
+BinPackParameters: false
+IndentWidth: 2
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+BreakBeforeBraces: Custom

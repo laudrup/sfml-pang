@@ -8,20 +8,20 @@
 
 #include <memory>
 
-class Shot : public sf::RectangleShape
-{
+class Shot : public sf::RectangleShape {
 public:
-  Shot(sf::Vector2f pos, const sf::IntRect& area, float initial_height,
+  Shot(sf::Vector2f pos,
+       const sf::IntRect& area,
+       float initial_height,
        thor::ResourceHolder<sf::Texture, std::string>& resources);
   void update(sf::Time delta_time);
   sf::Vector2f position() const;
   sf::FloatRect bounds() const;
 
 private:
-  const std::vector<sf::IntRect> textures_ = { sf::IntRect(91, 0, 10, 200),
-                                               sf::IntRect(19, 0, 10, 200) };
+  const std::vector<sf::IntRect> textures_ = {sf::IntRect(91, 0, 10, 200), sf::IntRect(19, 0, 10, 200)};
   const sf::IntRect area_;
-  const sf::Vector2f speed_ {0.f, 150.f};
+  const sf::Vector2f speed_{0.f, 150.f};
   thor::FrameAnimation shot_anim_;
   thor::Animator<sf::RectangleShape, std::string> anim_;
 };
