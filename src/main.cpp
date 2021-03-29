@@ -10,8 +10,25 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <iomanip>
+#include <sstream>
 
-#include <cassert>
+namespace
+{
+
+void save_screenshot(const sf::Texture& tex)
+{
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  std::ostringstream os;
+  os << std::put_time(&tm, "screenshot_%Y%m%d_%H%M%S.png");
+  const auto fname = os.str();
+  sf::Image img = tex.copyToImage();
+  img.saveToFile(fname);
+  std::cerr << "Screenshot saved to '" << fname << "'\n";
+}
+
+}
 
 int main()
 {
@@ -46,6 +63,13 @@ int main()
         window.close();
         break;
       case sf::Event::KeyPressed:
+        if (event.key.code == sf::Keyboard::F12) {
+          sf::Texture tex;
+          tex.create(window.getSize().x, window.getSize().y);
+          tex.update(window);
+          save_screenshot(tex);
+          break;
+        }
       case sf::Event::KeyReleased:
         if(player.handleEvent(event))
         {
