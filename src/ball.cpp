@@ -74,7 +74,7 @@ sf::FloatRect Ball::bounds() const {
 }
 
 std::pair<Ball, Ball> Ball::split() const {
-  Type type;
+  Type type{};
   switch (type_) {
   case Ball::Type::Large:
     type = Type::Medium;
