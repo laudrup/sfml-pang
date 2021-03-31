@@ -7,7 +7,7 @@
 
 class Background : public sf::Drawable {
 public:
-  Background(const sf::Vector2u& area);
+  Background();
   sf::Vector2f scale() const {
     return sprite_.getScale();
   }

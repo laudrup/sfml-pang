@@ -1,6 +1,6 @@
 #include "background.h"
 
-Background::Background(const sf::Vector2u& area) {
+Background::Background() {
   sf::Image bg_image;
   bg_image.loadFromFile("gfx/background.png");
   sf::Texture texture;
