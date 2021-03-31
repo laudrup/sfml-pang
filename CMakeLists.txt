@@ -5,6 +5,9 @@ project(pang CXX)
 set(SFML_DIR ${SFML_ROOT}/lib/cmake/SFML)
 find_package(SFML 2.5 COMPONENTS graphics system window REQUIRED)
 
+include(cmake/CompilerWarnings.cmake)
+add_library(project_warnings INTERFACE)
+set_project_warnings(project_warnings)
 add_subdirectory(thirdparty)
 add_subdirectory(gfx)
 
@@ -17,6 +20,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+  project_warnings
   sfml-graphics
   sfml-system
   sfml-window
