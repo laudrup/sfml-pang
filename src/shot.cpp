@@ -32,6 +32,6 @@ void Shot::update(sf::Time delta_time) {
   anim_.animate(*this);
 
   auto rect = getTextureRect();
-  rect.height = getSize().y;
+  rect.height = static_cast<int>(getSize().y);
   setTextureRect(rect);
 }

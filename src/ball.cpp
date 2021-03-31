@@ -13,7 +13,7 @@ Ball::Ball(Type type,
            thor::ResourceHolder<sf::Texture, std::string>* resources)
     : type_(type)
     , direction_(direction)
-    , velocity_(1.5f * static_cast<int>(direction), -5.f)
+    , velocity_(1.5f * static_cast<float>(direction), -5.f)
     , area_(area)
     , texture_(&resources->acquire("ball", res::fromFile<sf::Texture>("gfx/ball.png"), res::Reuse))
     , resources_(resources) {
@@ -50,18 +50,18 @@ void Ball::update(const sf::Time delta_time) {
   if (new_pos.x - getRadius() <= 8) { // left edge
     velocity_.x *= -1;
     direction_ = static_cast<Direction>(static_cast<int>(direction_) * -1);
-    new_pos.x = area_.left + getRadius() + 8;
-  } else if (new_pos.x + getRadius() >= area_.width - 8) { // right edge
+    new_pos.x = static_cast<float>(area_.left) + getRadius() + 8;
+  } else if (new_pos.x + getRadius() >= static_cast<float>(area_.width - 8)) { // right edge
     velocity_.x *= -1;
     direction_ = static_cast<Direction>(static_cast<int>(direction_) * -1);
-    new_pos.x = area_.width - getRadius() - 8;
+    new_pos.x = static_cast<float>(area_.width) - getRadius() - 8;
   } else if (new_pos.y - getRadius() < 8) { // top of window
     velocity_.y *= -1;
-    new_pos.y = area_.top + getRadius() + 8;
-  } else if (new_pos.y + getRadius() >= area_.height - 8) { // bottom of window
+    new_pos.y = static_cast<float>(area_.top) + getRadius() + 8;
+  } else if (new_pos.y + getRadius() >= static_cast<float>(area_.height) - 8) { // bottom of window
     velocity_.y = gravity.y;
     velocity_.y *= -1;
-    new_pos.y = area_.height - getRadius() - 8;
+    new_pos.y = static_cast<float>(area_.height) - getRadius() - 8;
   }
   setPosition(new_pos);
 }

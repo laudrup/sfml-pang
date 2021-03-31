@@ -103,8 +103,8 @@ bool Player::handleEvent(sf::Event event) {
 
 void Player::update(sf::Time delta_time) {
   if (state_ == State::Dying) {
-    if (getPosition().x + 24 <= 0 || getPosition().x - 24 >= area_.width || getPosition().y <= 0 ||
-        getPosition().y - 32 >= area_.height) {
+    if (getPosition().x + 24 <= 0 || getPosition().x - 24 >= static_cast<float>(area_.width) || getPosition().y <= 0 ||
+        getPosition().y - 32 >= static_cast<float>(area_.height)) {
       state_ = State::Dead;
     }
 
@@ -133,8 +133,8 @@ void Player::update(sf::Time delta_time) {
   } else if (direction_ == Direction::Right) {
     setScale(1.f, 1.f);
     move({speed_.x * delta_time.asSeconds(), 0.f});
-    if (getPosition().x > area_.width - 24) {
-      setPosition(area_.width - 24, getPosition().y);
+    if (getPosition().x > static_cast<float>(area_.width) - 24) {
+      setPosition(static_cast<float>(area_.width) - 24, getPosition().y);
     }
   } else if (direction_ == Direction::Stopped) {
   }
