@@ -59,10 +59,10 @@ int main() {
           save_screenshot(tex);
           break;
         }
+        [[fallthrough]];
       case sf::Event::KeyReleased:
-        if (player.handleEvent(event)) {
-          break;
-        }
+        player.handleEvent(event);
+        break;
       default:
         break;
       }
