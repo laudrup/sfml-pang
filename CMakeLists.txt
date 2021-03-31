@@ -8,6 +8,7 @@ find_package(SFML 2.5 COMPONENTS graphics system window REQUIRED)
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/PreventInSourceBuilds.cmake)
 include(cmake/CompilerWarnings.cmake)
+include(cmake/StaticAnalyzers.cmake)
 include(cmake/Sanitizers.cmake)
 
 add_library(project_options INTERFACE)
