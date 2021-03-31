@@ -5,9 +5,12 @@ project(pang CXX)
 set(SFML_DIR ${SFML_ROOT}/lib/cmake/SFML)
 find_package(SFML 2.5 COMPONENTS graphics system window REQUIRED)
 
+include(cmake/StandardProjectSettings.cmake)
 include(cmake/PreventInSourceBuilds.cmake)
 include(cmake/CompilerWarnings.cmake)
+add_library(project_options INTERFACE)
 add_library(project_warnings INTERFACE)
+target_compile_features(project_options INTERFACE cxx_std_17)
 set_project_warnings(project_warnings)
 add_subdirectory(thirdparty)
 add_subdirectory(gfx)
@@ -20,6 +23,8 @@ add_executable(${PROJECT_NAME}
   src/background.cpp
 )
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
   project_warnings
   sfml-graphics
@@ -28,10 +33,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   thor
 )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 if(WIN32)
   target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
+
 if(WIN32)
   add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:sfml-graphics> $<TARGET_FILE_DIR:${PROJECT_NAME}>
