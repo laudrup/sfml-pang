@@ -103,8 +103,10 @@ bool Player::handleEvent(sf::Event event) {
 
 void Player::update(sf::Time delta_time) {
   if (state_ == State::Dying) {
-    if (getPosition().x + 24 <= 0 || getPosition().x - 24 >= static_cast<float>(area_.width) || getPosition().y <= 0 ||
-        getPosition().y - 32 >= static_cast<float>(area_.height)) {
+    if (getPosition().x + sprite_.getGlobalBounds().width / 2 <= 0 ||
+        getPosition().x - sprite_.getGlobalBounds().width / 2 >= area_.width ||
+        getPosition().y <= 0 ||
+        getPosition().y - sprite_.getGlobalBounds().height >= area_.height) {
       state_ = State::Dead;
     }
 
