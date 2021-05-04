@@ -26,7 +26,7 @@ public:
     Dead,
   };
 
-  Player(sf::Vector2f pos, const sf::IntRect& area, thor::ResourceHolder<sf::Texture, std::string>& resources);
+  Player(sf::Vector2f pos, const sf::FloatRect& area, thor::ResourceHolder<sf::Texture, std::string>& resources);
   bool handleEvent(sf::Event event);
   void update(sf::Time delta_time);
   std::vector<std::shared_ptr<Shot>> shots() const {
@@ -45,7 +45,7 @@ private:
   Direction direction_;
   State state_;
   sf::Sprite sprite_;
-  const sf::IntRect area_;
+  const sf::FloatRect area_;
   const std::array<sf::IntRect, 5> walk_textures_ = {
       sf::IntRect(10, 2, 32, 32),
       sf::IntRect(44, 2, 32, 32),

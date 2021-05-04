@@ -21,7 +21,7 @@ public:
        sf::Color color,
        sf::Vector2f position,
        Direction direction,
-       const sf::IntRect& area,
+       const sf::FloatRect& area,
        thor::ResourceHolder<sf::Texture, std::string>* resources);
   void update(const sf::Time delta_time);
   sf::FloatRect bounds() const;
@@ -38,7 +38,7 @@ private:
   Direction direction_;
   float mass_;
   sf::Vector2f velocity_;
-  sf::IntRect area_;
+  sf::FloatRect area_;
   sf::Texture* texture_;
   thor::ResourceHolder<sf::Texture, std::string>* resources_;
 };

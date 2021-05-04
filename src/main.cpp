@@ -34,13 +34,13 @@ int main() {
   sf::View view(sf::FloatRect(0, 0, 384, 208));
   window.setView(view);
   Background background;
-  auto area = sf::IntRect(0, 0, static_cast<int>(background.size().x), static_cast<int>(background.size().y));
+  auto area = sf::FloatRect(8, 8, background.size().x - 8, background.size().y - 8);
   std::vector<Ball> balls = {
       Ball(Ball::Type::Large, sf::Color::Red, {384.f / 3, 208.f / 2}, Ball::Direction::East, area, &resources),
       Ball(Ball::Type::Medium, sf::Color::Yellow, {384.f / 2, 208.f / 2}, Ball::Direction::East, area, &resources),
       Ball(Ball::Type::Small, sf::Color::Green, {384.f / 3, 208.f / 2}, Ball::Direction::East, area, &resources),
       Ball(Ball::Type::Tiny, sf::Color::Blue, {384 / 1.5, 208.f / 3}, Ball::Direction::East, area, &resources)};
-  Player player(sf::Vector2f(static_cast<float>(area.width) / 2, static_cast<float>(area.height)), area, resources);
+  Player player(sf::Vector2f(area.width / 2, area.height), area, resources);
   sf::Clock clock;
   const sf::Time ai_time = sf::seconds(1.f) / 20.f;
   sf::Time elapsed_time = clock.restart();

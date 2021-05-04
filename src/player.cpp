@@ -2,7 +2,7 @@
 
 namespace res = thor::Resources;
 
-Player::Player(sf::Vector2f pos, const sf::IntRect& area, thor::ResourceHolder<sf::Texture, std::string>& resources)
+Player::Player(sf::Vector2f pos, const sf::FloatRect& area, thor::ResourceHolder<sf::Texture, std::string>& resources)
     : direction_(Direction::Stopped)
     , state_(State::Alive)
     , area_(area)
@@ -16,7 +16,7 @@ Player::Player(sf::Vector2f pos, const sf::IntRect& area, thor::ResourceHolder<s
   sprite_.setTexture(resources.acquire("player", res::fromImage<sf::Texture>(img)));
   sprite_.setTextureRect(*walk_textures_.begin());
   sprite_.setOrigin(sprite_.getLocalBounds().width / 2, sprite_.getLocalBounds().height);
-  setPosition(pos.x, pos.y - 8);
+  setPosition(pos.x, pos.y);
   for (const auto& rect : walk_textures_) {
     walk_anim_.addFrame(1.f, rect);
   }
@@ -120,21 +120,21 @@ void Player::update(sf::Time delta_time) {
   }
   shots_.erase(std::remove_if(shots_.begin(),
                               shots_.end(),
-                              [](auto shot) {
-                                return shot->bounds().top <= 8;
+                              [this](auto shot) {
+                                return shot->bounds().top <= area_.top;
                               }),
                shots_.end());
   if (direction_ == Direction::Left) {
     setScale(-1.f, 1.f);
     move({-speed_.x * delta_time.asSeconds(), 0.f});
-    if (getPosition().x - sprite_.getLocalBounds().width / 2 < 8) {
-      setPosition(8 + sprite_.getLocalBounds().width / 2, getPosition().y);
+    if (getPosition().x - sprite_.getLocalBounds().width / 2 < area_.left) {
+      setPosition(area_.left + sprite_.getLocalBounds().width / 2, getPosition().y);
     }
   } else if (direction_ == Direction::Right) {
     setScale(1.f, 1.f);
     move({speed_.x * delta_time.asSeconds(), 0.f});
-    if (getPosition().x > static_cast<float>(area_.width) - 24) {
-      setPosition(static_cast<float>(area_.width) - 24, getPosition().y);
+    if (getPosition().x > area_.width - sprite_.getLocalBounds().width / 2) {
+      setPosition(area_.width - sprite_.getLocalBounds().width / 2, getPosition().y);
     }
   } else if (direction_ == Direction::Stopped) {
   }

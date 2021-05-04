@@ -3,7 +3,7 @@
 namespace res = thor::Resources;
 
 Shot::Shot(sf::Vector2f pos,
-           const sf::IntRect& area,
+           const sf::FloatRect& area,
            float initial_height,
            thor::ResourceHolder<sf::Texture, std::string>& resources)
     : area_(area) {
