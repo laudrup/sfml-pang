@@ -66,13 +66,6 @@ void Ball::update(const sf::Time delta_time) {
   setPosition(new_pos);
 }
 
-sf::FloatRect Ball::bounds() const {
-  return sf::FloatRect(getPosition().x - getOrigin().x,
-                       getPosition().y - getOrigin().y,
-                       getGlobalBounds().width,
-                       getGlobalBounds().height);
-}
-
 std::pair<Ball, Ball> Ball::split() const {
   Type type{};
   switch (type_) {

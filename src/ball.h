@@ -24,7 +24,6 @@ public:
        const sf::FloatRect& area,
        thor::ResourceHolder<sf::Texture, std::string>* resources);
   void update(const sf::Time delta_time);
-  sf::FloatRect bounds() const;
   std::pair<Ball, Ball> split() const;
   Type type() const {
     return type_;

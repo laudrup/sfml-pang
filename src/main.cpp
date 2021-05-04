@@ -87,7 +87,7 @@ int main() {
       for (const auto& shot : player.shots()) {
         std::vector<Ball>::iterator ball_it = balls.begin();
         while (ball_it != balls.end()) {
-          if (ball_it->bounds().intersects(shot->bounds())) {
+          if (ball_it->getGlobalBounds().intersects(shot->getGlobalBounds())) {
             if (ball_it->type() != Ball::Type::Tiny) {
               auto new_balls = ball_it->split();
               balls.erase(ball_it);
@@ -105,7 +105,7 @@ int main() {
         }
       }
       for (const auto& ball : balls) {
-        if (ball.bounds().intersects(player.bounds())) {
+        if (ball.getGlobalBounds().intersects(player.getGlobalBounds())) {
           // TODO: Do pixel perfect collision detection. This will
           // kill the player even if the ball hasn't actually touched
           player.die(ball.direction());

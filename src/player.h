@@ -12,7 +12,7 @@
 #include <array>
 #include <string>
 
-class Player : public sf::Drawable, public sf::Transformable {
+class Player : public sf::Sprite {
 public:
   enum class Direction {
     Left,
@@ -32,7 +32,6 @@ public:
   std::vector<std::shared_ptr<Shot>> shots() const {
     return shots_;
   }
-  sf::FloatRect bounds() const;
   void removeShot();
   void die(Ball::Direction direction);
   State state() const {
@@ -40,11 +39,8 @@ public:
   }
 
 private:
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
   Direction direction_;
   State state_;
-  sf::Sprite sprite_;
   const sf::FloatRect area_;
   const std::array<sf::IntRect, 5> walk_textures_ = {
       sf::IntRect(10, 2, 32, 32),

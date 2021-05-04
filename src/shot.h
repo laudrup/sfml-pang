@@ -16,7 +16,6 @@ public:
        thor::ResourceHolder<sf::Texture, std::string>& resources);
   void update(sf::Time delta_time);
   sf::Vector2f position() const;
-  sf::FloatRect bounds() const;
 
 private:
   const std::vector<sf::IntRect> textures_ = {sf::IntRect(91, 0, 10, 200), sf::IntRect(19, 0, 10, 200)};

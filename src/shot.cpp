@@ -17,13 +17,6 @@ Shot::Shot(sf::Vector2f pos,
   anim_.playAnimation("shot", true);
 }
 
-sf::FloatRect Shot::bounds() const {
-  return sf::FloatRect(getPosition().x - getOrigin().x,
-                       getPosition().y - getOrigin().y,
-                       getGlobalBounds().width,
-                       getGlobalBounds().height);
-}
-
 void Shot::update(sf::Time delta_time) {
   move({speed_.x, speed_.y * -delta_time.asSeconds()});
   setSize({getSize().x, getSize().y + speed_.y * delta_time.asSeconds()});
