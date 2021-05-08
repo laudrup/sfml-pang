@@ -2,6 +2,7 @@
 #include "ball.h"
 #include "player.h"
 #include "shot.h"
+#include "status_panel.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -30,10 +31,12 @@ void save_screenshot(const sf::Texture& tex) {
 
 int main() {
   thor::ResourceHolder<sf::Texture, std::string> resources;
-  sf::RenderWindow window(sf::VideoMode(384 * 2, 208 * 2), "SFML works!");
-  sf::View view(sf::FloatRect(0, 0, 384, 208));
+  sf::RenderWindow window(sf::VideoMode(384 * 2, 240 * 2), "SFML works!");
+  sf::View view(sf::FloatRect(0, 0, 384, 240));
   window.setView(view);
   Background background;
+  StatusPanel status_panel("Mount Doom", "Freja", 7);
+
   auto area = sf::FloatRect(8, 8, background.size().x - 8, background.size().y - 8);
   std::vector<Ball> balls = {
       Ball(Ball::Type::Large, sf::Color::Red, {384.f / 3, 208.f / 2}, Ball::Direction::East, area, &resources),
@@ -115,6 +118,7 @@ int main() {
     }
     window.clear();
     window.draw(background);
+    window.draw(status_panel);
     for (auto& ball : balls) {
       window.draw(ball);
     }

@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME}
   src/player.cpp
   src/shot.cpp
   src/background.cpp
+  src/status_panel.cpp
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)

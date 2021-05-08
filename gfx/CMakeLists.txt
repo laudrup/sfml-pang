@@ -1,4 +1,5 @@
 file(COPY
+  atarian_system_extended_bold.ttf
   background.png
   ball.png
   player.png
