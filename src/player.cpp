@@ -12,7 +12,6 @@ Player::Player(sf::Vector2f pos, const sf::FloatRect& area, thor::ResourceHolder
   if (!img.loadFromFile("gfx/player.png")) {
     abort();
   }
-  img.createMaskFromColor(sf::Color::Green);
   setTexture(resources.acquire("player", res::fromImage<sf::Texture>(img)));
   setTextureRect(*walk_textures_.begin());
   setOrigin(getLocalBounds().width / 2, getLocalBounds().height);
