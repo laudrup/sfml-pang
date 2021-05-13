@@ -23,11 +23,12 @@ add_subdirectory(thirdparty)
 add_subdirectory(gfx)
 
 add_executable(${PROJECT_NAME}
-  src/main.cpp
+  src/background.cpp
   src/ball.cpp
+  src/main.cpp
   src/player.cpp
   src/shot.cpp
-  src/background.cpp
+  src/sound_manager.cpp
   src/status_panel.cpp
 )
 
@@ -35,6 +36,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
   project_warnings
+  sfml-audio
   sfml-graphics
   sfml-system
   sfml-window

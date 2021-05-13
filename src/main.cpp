@@ -3,6 +3,7 @@
 #include "player.h"
 #include "shot.h"
 #include "status_panel.h"
+#include "sound_manager.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -36,6 +37,7 @@ int main() {
   window.setView(view);
   Background background;
   StatusPanel status_panel("Mount Doom", "Freja", 7);
+  SoundManager sound_manager;
 
   auto area = sf::FloatRect(8, 8, background.size().x - 8, background.size().y - 8);
   std::vector<Ball> balls = {
@@ -91,6 +93,7 @@ int main() {
         std::vector<Ball>::iterator ball_it = balls.begin();
         while (ball_it != balls.end()) {
           if (ball_it->getGlobalBounds().intersects(shot->getGlobalBounds())) {
+            sound_manager.play("pop");
             if (ball_it->type() != Ball::Type::Tiny) {
               auto new_balls = ball_it->split();
               balls.erase(ball_it);
@@ -112,6 +115,7 @@ int main() {
           // TODO: Do pixel perfect collision detection. This will
           // kill the player even if the ball hasn't actually touched
           player.die(ball.direction());
+          sound_manager.play("death");
           break;
         }
       }
