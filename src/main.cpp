@@ -17,12 +17,17 @@
 
 namespace {
 
-void save_screenshot(const sf::Texture& tex) {
+void save_screenshot(const sf::RenderWindow& window) {
   auto t = std::time(nullptr);
   auto tm = *std::localtime(&t);
   std::ostringstream os;
   os << std::put_time(&tm, "screenshot_%Y%m%d_%H%M%S.png");
   const auto fname = os.str();
+
+  sf::Texture tex;
+  tex.create(window.getSize().x, window.getSize().y);
+  tex.update(window);
+
   sf::Image img = tex.copyToImage();
   img.saveToFile(fname);
   std::cerr << "Screenshot saved to '" << fname << "'\n";
@@ -58,10 +63,7 @@ int main() {
         break;
       case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::F12) {
-          sf::Texture tex;
-          tex.create(window.getSize().x, window.getSize().y);
-          tex.update(window);
-          save_screenshot(tex);
+          save_screenshot(window);
           break;
         }
         [[fallthrough]];
