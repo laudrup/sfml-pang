@@ -3,9 +3,9 @@
 SoundManager::SoundManager() {
   sf::SoundBuffer buffer;
 
-  buffer.loadFromFile("gfx/pop.ogg");
+  buffer.loadFromFile("data/pop.ogg");
   buffers_["pop"] = buffer;
-  buffer.loadFromFile("gfx/death.ogg");
+  buffer.loadFromFile("data/death.ogg");
   buffers_["death"] = buffer;
 }
 

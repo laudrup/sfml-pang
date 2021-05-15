@@ -2,7 +2,7 @@
 
 Background::Background() {
   sf::Image bg_image;
-  bg_image.loadFromFile("gfx/background.png");
+  bg_image.loadFromFile("data/background.png");
   sf::Texture texture;
   for (int i = 8; i < 25 * (208 + 8); i += 216) {
     texture.loadFromImage(bg_image, sf::IntRect(8, i, 384, 208));

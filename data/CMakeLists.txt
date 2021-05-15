@@ -7,5 +7,5 @@ file(COPY
   pop.ogg
   shot.png
   DESTINATION
-  ${${PROJECT_NAME}_BINARY_DIR}/gfx
+  ${${PROJECT_NAME}_BINARY_DIR}/data
 )

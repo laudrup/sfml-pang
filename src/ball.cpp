@@ -15,7 +15,7 @@ Ball::Ball(Type type,
     , direction_(direction)
     , velocity_(1.5f * static_cast<float>(direction), -5.f)
     , area_(area)
-    , texture_(&resources->acquire("ball", res::fromFile<sf::Texture>("gfx/ball.png"), res::Reuse))
+    , texture_(&resources->acquire("ball", res::fromFile<sf::Texture>("data/ball.png"), res::Reuse))
     , resources_(resources) {
   switch (type) {
   case Type::Large:

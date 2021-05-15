@@ -7,7 +7,7 @@ Shot::Shot(sf::Vector2f pos,
            float initial_height,
            thor::ResourceHolder<sf::Texture, std::string>& resources)
     : area_(area) {
-  setTexture(&resources.acquire("shot", res::fromFile<sf::Texture>("gfx/shot.png"), res::Reuse));
+  setTexture(&resources.acquire("shot", res::fromFile<sf::Texture>("data/shot.png"), res::Reuse));
   setSize({static_cast<float>(textures_.begin()->width), initial_height});
   setPosition(pos.x, pos.y - initial_height);
   for (const auto& rect : textures_) {

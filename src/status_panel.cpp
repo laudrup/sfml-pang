@@ -5,10 +5,10 @@ StatusPanel::StatusPanel(const std::string& level_name, const std::string& playe
   : level_name_(level_name)
   , player_name_(player_name)
   , player_lives_(player_lives) {
-  if (!font_.loadFromFile("gfx/atarian_system_extended_bold.ttf")) {
+  if (!font_.loadFromFile("data/atarian_system_extended_bold.ttf")) {
     abort();
   }
-  if (!player_texture_.loadFromFile("gfx/player.png", sf::IntRect(154, 44, 16, 16))) {
+  if (!player_texture_.loadFromFile("data/player.png", sf::IntRect(154, 44, 16, 16))) {
     abort();
   }
 }

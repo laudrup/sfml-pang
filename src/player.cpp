@@ -9,7 +9,7 @@ Player::Player(sf::Vector2f pos, const sf::FloatRect& area, thor::ResourceHolder
     , resources_(resources)
     , death_anim_velocity_(-1.5f, -5.f) {
   sf::Image img;
-  if (!img.loadFromFile("gfx/player.png")) {
+  if (!img.loadFromFile("data/player.png")) {
     abort();
   }
   setTexture(resources.acquire("player", res::fromImage<sf::Texture>(img)));
