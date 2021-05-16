@@ -7,13 +7,13 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <cmath>
 #include <cstdlib>
+#include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <memory>
 #include <sstream>
-#include <utility>
+#include <string>
+#include <vector>
 
 namespace {
 

@@ -1,8 +1,5 @@
 #include "ball.h"
 
-#include <cassert>
-#include <iostream>
-
 namespace res = thor::Resources;
 
 Ball::Ball(Type type,

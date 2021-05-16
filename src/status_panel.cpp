@@ -1,5 +1,4 @@
 #include "status_panel.h"
-#include <iostream>
 
 StatusPanel::StatusPanel(const std::string& level_name, const std::string& player_name, int player_lives)
   : level_name_(level_name)
