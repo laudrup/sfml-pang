@@ -3,16 +3,12 @@
 namespace res = thor::Resources;
 
 Player::Player(sf::Vector2f pos, const sf::FloatRect& area, thor::ResourceHolder<sf::Texture, std::string>& resources)
-    : direction_(Direction::Stopped)
-    , state_(State::Alive)
-    , area_(area)
-    , resources_(resources)
-    , death_anim_velocity_(-1.5f, -5.f) {
-  sf::Image img;
-  if (!img.loadFromFile("data/player.png")) {
-    abort();
-  }
-  setTexture(resources.acquire("player", res::fromImage<sf::Texture>(img)));
+  : sf::Sprite(resources.acquire("player", res::fromFile<sf::Texture>("data/player.png"), res::Reuse))
+  , direction_(Direction::Stopped)
+  , state_(State::Alive)
+  , area_(area)
+  , resources_(resources)
+  , death_anim_velocity_(-1.5f, -5.f) {
   setTextureRect(*walk_textures_.begin());
   setOrigin(getLocalBounds().width / 2, getLocalBounds().height);
   setPosition(pos.x, pos.y);
