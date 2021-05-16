@@ -3,11 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <Thor/Resources.hpp>
+
 #include <string>
 
 class StatusPanel : public sf::Drawable {
 public:
-  StatusPanel(const std::string& level_name, const std::string& player_name, int player_lives);
+  StatusPanel(const std::string& level_name, const std::string& player_name, int player_lives, thor::ResourceHolder<sf::Texture, std::string>& resources);
 
 private:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

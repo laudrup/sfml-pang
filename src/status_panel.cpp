@@ -1,13 +1,13 @@
 #include "status_panel.h"
 
-StatusPanel::StatusPanel(const std::string& level_name, const std::string& player_name, int player_lives)
+namespace res = thor::Resources;
+
+StatusPanel::StatusPanel(const std::string& level_name, const std::string& player_name, int player_lives, thor::ResourceHolder<sf::Texture, std::string>& resources)
   : level_name_(level_name)
   , player_name_(player_name)
-  , player_lives_(player_lives) {
+  , player_lives_(player_lives)
+  , player_texture_(resources.acquire("player", res::fromFile<sf::Texture>("data/player.png"), res::Reuse)) {
   if (!font_.loadFromFile("data/atarian_system_extended_bold.ttf")) {
-    abort();
-  }
-  if (!player_texture_.loadFromFile("data/player.png", sf::IntRect(154, 44, 16, 16))) {
     abort();
   }
 }
@@ -44,6 +44,7 @@ void StatusPanel::drawPlayerLives(sf::RenderTarget& target) const {
     }
     sf::Sprite sprite;
     sprite.setTexture(player_texture_);
+    sprite.setTextureRect(sf::IntRect(154, 44, 16, 16));
     sprite.setPosition(static_cast<float>(x), 223);
     target.draw(sprite);
   }

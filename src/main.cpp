@@ -41,7 +41,7 @@ int main() {
   sf::View view(sf::FloatRect(0, 0, 384, 240));
   window.setView(view);
   Background background;
-  StatusPanel status_panel("Mount Doom", "Freja", 7);
+  StatusPanel status_panel("Mount Doom", "Freja", 7, resources);
   SoundManager sound_manager;
 
   auto area = sf::FloatRect(8, 8, background.size().x - 8, background.size().y - 8);
