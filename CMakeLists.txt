@@ -25,6 +25,7 @@ add_subdirectory(data)
 add_executable(${PROJECT_NAME}
   src/background.cpp
   src/ball.cpp
+  src/game.cpp
   src/main.cpp
   src/player.cpp
   src/shot.cpp
