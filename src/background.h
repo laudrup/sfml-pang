@@ -1,5 +1,4 @@
-#ifndef BACKGROUND_H
-#define BACKGROUND_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -21,4 +20,3 @@ private:
   sf::Sprite sprite_;
 };
 
-#endif // BACKGROUND_H

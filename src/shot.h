@@ -1,5 +1,4 @@
-#ifndef SHOT_H
-#define SHOT_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -25,4 +24,3 @@ private:
   thor::Animator<sf::RectangleShape, std::string> anim_;
 };
 
-#endif // SHOT_H

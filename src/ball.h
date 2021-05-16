@@ -1,5 +1,4 @@
-#ifndef BALL_H
-#define BALL_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -42,4 +41,3 @@ private:
   thor::ResourceHolder<sf::Texture, std::string>* resources_;
 };
 
-#endif // BALL_H

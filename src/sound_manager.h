@@ -1,5 +1,4 @@
-#ifndef SOUND_MANAGER_H
-#define SOUND_MANAGER_H
+#pragma once
 
 #include <SFML/Audio.hpp>
 
@@ -17,4 +16,3 @@ private:
   std::vector<sf::Sound> sounds_;
 };
 
-#endif

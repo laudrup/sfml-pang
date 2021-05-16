@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include "ball.h"
 #include "shot.h"
@@ -67,4 +66,3 @@ private:
   sf::Vector2f death_anim_velocity_;
 };
 
-#endif // PLAYER_H

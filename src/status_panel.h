@@ -1,5 +1,4 @@
-#ifndef STATUS_PANEL_H
-#define STATUS_PANEL_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -24,4 +23,3 @@ private:
   sf::Texture player_texture_;
 };
 
-#endif // STATUS_PANEL_H
