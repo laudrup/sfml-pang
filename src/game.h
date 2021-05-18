@@ -18,6 +18,7 @@ public:
   Game(thor::ResourceHolder<sf::Texture, std::string>& resources, SoundManager& sound_manager);
   void handleEvent(sf::Event event);
   void update(sf::Time delta_time);
+  void pause() { paused_ = !paused_; };
 
 private:
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -37,4 +38,5 @@ private:
   };
   sf::Clock clock_;
   sf::Time elapsed_time_;
+  bool paused_ = false;
 };

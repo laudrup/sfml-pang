@@ -16,6 +16,11 @@ void Game::handleEvent(sf::Event event) {
 }
 
 void Game::update(sf::Time ai_time) {
+  if (paused_) {
+    elapsed_time_ = clock_.restart();
+    return;
+  }
+
   elapsed_time_ += clock_.restart();
 
   while (elapsed_time_ >= ai_time) {
@@ -81,5 +86,18 @@ void Game::draw(sf::RenderTarget& target, sf::RenderStates) const {
 
   for (auto& shot : player_.shots()) {
     target.draw(*shot);
+  }
+
+  if (paused_) {
+    sf::Font font;
+    if (!font.loadFromFile("data/atarian_system_extended_bold.ttf")) {
+      abort();
+    }
+    sf::Text text("Paused", font);
+    text.setOutlineThickness(1);
+    text.setCharacterSize(30);
+    auto center = target.getView().getSize().x / 2 - text.getGlobalBounds().width / 2;
+    text.setPosition(center, area_.height / 2 - text.getGlobalBounds().height / 2);
+    target.draw(text);
   }
 }

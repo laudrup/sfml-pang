@@ -52,6 +52,10 @@ int main() {
           save_screenshot(window);
           break;
         }
+        if (event.key.code == sf::Keyboard::P) {
+          game.pause();
+          break;
+        }
         [[fallthrough]];
       case sf::Event::KeyReleased:
         game.handleEvent(event);
