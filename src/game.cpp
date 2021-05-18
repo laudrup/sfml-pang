@@ -18,20 +18,12 @@ void Game::handleEvent(sf::Event event) {
 void Game::update(sf::Time ai_time) {
   elapsed_time_ += clock_.restart();
 
-  if (player_.state() == Player::State::Dead) {
-    std::cout << "You died!\n";
-    exit(0);
-  }
-
   while (elapsed_time_ >= ai_time) {
-    if (player_.state() == Player::State::Alive) {
-      for (auto& ball : balls_) {
-        ball.update(ai_time);
-      }
-    }
-    player_.update(ai_time);
     elapsed_time_ -= ai_time;
+
+    player_.update(ai_time);
     if (player_.state() == Player::State::Alive) {
+
       for (const auto& shot : player_.shots()) {
         std::vector<Ball>::iterator ball_it = balls_.begin();
         while (ball_it != balls_.end()) {
@@ -53,7 +45,9 @@ void Game::update(sf::Time ai_time) {
           }
         }
       }
-      for (const auto& ball : balls_) {
+      for (auto& ball : balls_) {
+        ball.update(ai_time);
+
         if (ball.getGlobalBounds().intersects(player_.getGlobalBounds())) {
           // TODO: Do pixel perfect collision detection. This will
           // kill the player even if the ball hasn't actually touched
@@ -64,6 +58,12 @@ void Game::update(sf::Time ai_time) {
       }
     }
   }
+
+  if (player_.state() == Player::State::Dead) {
+    std::cout << "You died!\n";
+    exit(0);
+  }
+
   if (balls_.empty()) {
     std::cout << "Level complete!\n";
     exit(0);
