@@ -1,0 +1,20 @@
+diff --git a/src/Random.cpp b/src/Random.cpp
+index afbe76b..1478c39 100644
+--- a/src/Random.cpp
++++ b/src/Random.cpp
+@@ -76,13 +76,13 @@ namespace
+ 			}
+ 
+ 			// Return minimal value (compliant to Std.Random)
+-			static sf::Uint32 min()
++			static constexpr sf::Uint32 min()
+ 			{
+ 				return 0;
+ 			}
+ 
+ 			// Return maximal value (compliant to Std.Random)
+-			static sf::Uint32 max()
++			static constexpr sf::Uint32 max()
+ 			{
+ 				return 0xffffffff;
+ 			}

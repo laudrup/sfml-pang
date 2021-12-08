@@ -5,6 +5,7 @@ ExternalProject_Add(thor_external
   GIT_TAG v2.0
   CMAKE_ARGS -DSFML_ROOT:PATH=${SFML_ROOT} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
   UPDATE_COMMAND ""
+  PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/thor.patch
   BUILD_BYPRODUCTS <INSTALL_DIR>/lib/libthor.so # Only used by Ninja generator
 )
 
