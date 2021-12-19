@@ -7,13 +7,12 @@ add_library(common
   src/status_panel.cpp
 )
 
-set_property(TARGET common PROPERTY CXX_STANDARD 17)
-
 target_include_directories(common PUBLIC
   include
 )
 
 target_link_libraries(common PUBLIC
+  project_options
   project_warnings
   sfml-audio
   sfml-graphics
