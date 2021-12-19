@@ -20,7 +20,3 @@ target_link_libraries(common PUBLIC
   sfml-window
   thor
 )
-
-if(WIN32)
-  target_compile_definitions(common PRIVATE _CRT_SECURE_NO_WARNINGS)
-endif()

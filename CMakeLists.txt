@@ -16,6 +16,10 @@ add_library(project_warnings INTERFACE)
 
 target_compile_features(project_options INTERFACE cxx_std_17)
 
+if(WIN32)
+  target_compile_definitions(project_options INTERFACE _CRT_SECURE_NO_WARNINGS)
+endif()
+
 set_project_warnings(project_warnings)
 enable_sanitizers(project_options)
 
